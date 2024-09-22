@@ -62,6 +62,7 @@ exports.stopTrial = async (req, res, next) => {
 
 exports.addGazeData = async (req, res, next) => {  
   try {
+    console.log(req.body['data'])
     const trialId = await req.dbServices.getLastTrialId();
 
     for (let gazeData of req.body['data']) {

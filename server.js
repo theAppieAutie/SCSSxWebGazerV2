@@ -8,6 +8,7 @@ if (process.env.NODE_ENV !== "production") {
 //  middleware function for decompression
 function gzipDecompression(req, res, next) {
     if (req.headers['content-encoding'] === 'gzip') {
+        console.log("gzip encoding detected")
         const gunzip = zlib.createGunzip();
         req.pipe(gunzip);
 
@@ -58,7 +59,7 @@ app.use(gzipDecompression);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json({ limit: '1mb' }));
+app.use(bodyParser.json());
 app.use(flash());
 app.use(methodOverride('_method'));
 
