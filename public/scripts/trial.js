@@ -1,6 +1,5 @@
 import { initializeClassificationButtons, confirmClassification } from './classification.js';
 import {config} from "./config.js";
-import fetch from 'node-fetch';
 import {gzip} from 'zlib';
 import { promisify } from 'util';
 
