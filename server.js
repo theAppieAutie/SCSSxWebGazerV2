@@ -3,6 +3,7 @@ if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
   }
 
+  const zlib = require('zlib');
 
 //  middleware function for decompression
 function gzipDecompression(req, res, next) {
