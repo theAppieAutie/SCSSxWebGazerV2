@@ -63,7 +63,6 @@ const timeForTrial = config.trialLength * 60000;
 const timePerPacket = (config.packetTimeOnScreen * 1000) * packetArray.length <= timeForTrial ? config.packetTimeOnScreen : (timeForTrial / packetArray.length) / 1000; 
 
 
-
 // set up trial view
 if (group !== "A") {
   panelsElement.style.flexDirection = "row-reverse";
