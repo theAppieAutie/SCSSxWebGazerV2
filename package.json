@@ -18,7 +18,7 @@
         "express-flash": "^0.0.2",
         "express-session": "^1.17.1",
         "method-override": "^3.0.0",
-        "node-fetch": "^3.3.2",
+        "node-fetch": "^2.7.0",
         "pg": "^8.5.1",
         "supertest": "^7.0.0",
         "update": "^0.7.4",
