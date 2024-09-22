@@ -1,7 +1,6 @@
 import { initializeClassificationButtons, confirmClassification } from './classification.js';
 import {config} from "./config.js";
-import axios from 'axios';
-import pako from 'pako';
+
 
 
 //  object holding censored item list to add blur
