@@ -1,5 +1,10 @@
 import { initializeClassificationButtons, confirmClassification } from './classification.js';
 import {config} from "./config.js";
+import fetch from 'node-fetch';
+import {gzip} from 'zlib';
+import { promisify } from 'util';
+
+const gzipAsync = promisify(gzip);
 
 //  object holding censored item list to add blur
 const censoredOptions = {
@@ -162,6 +167,15 @@ const startTrial = () => {
 
   animatePackets();
 };
+
+async function compressGazeData(gazeData) {
+  try {
+    const compressed = await gzipAsync(JSON.stringify(gazeData))
+    return compressed;
+  } catch (err) {
+    console.error("Compression failed: ", err.message);
+  }
+}
   
 // handle end of the trial
 const endTrial = () => {
@@ -181,13 +195,15 @@ let gazeData = [];
 // handle participant input
 const handleGazeData = async () => {
   try {
+    const compressedGazeData = compressGazeData(gazeData);
     const response = await fetch('/trial/addGazeData', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
+        'Content-Encoding': 'gzip',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ gazeData })
+      body: compressedGazeData
     });
 
     if (!response.ok) {

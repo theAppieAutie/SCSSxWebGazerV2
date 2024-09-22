@@ -45,6 +45,29 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use((req, res, next) => {
+    if (req.headers['content-encoding'] === 'gzip') {
+      const unzip = zlib.createUnzip();
+      req.pipe(unzip);
+  
+      let data = '';
+      unzip.on('data', (chunk) => {
+        data += chunk;
+      });
+  
+      unzip.on('end', () => {
+        req.body = JSON.parse(data);
+        next();
+      });
+  
+      unzip.on('error', (err) => {
+        next(err);
+      });
+    } else {
+      next();
+    }
+});
+
 
 
 

@@ -63,7 +63,7 @@ exports.addGazeData = async (req, res, next) => {
     try {
         const trialId = await req.dbServices.getLastTrialId();
 
-        for (let gazeData of req.body['gazeData']) {
+        for (let gazeData of req.body['data']) {
             await req.dbServices.insertGazeData(trialId, parseFloat(gazeData.x), parseFloat(gazeData.y), gazeData.time);
         }
 
