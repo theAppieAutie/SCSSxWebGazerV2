@@ -13,6 +13,7 @@ const session = require('express-session');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
+const zlib = require('zlib');
 const participantDetailsRoutes = require("./routes/participantDetailsRoutes.js");
 const informationRoutes = require("./routes/informationRoutes.js");
 const scalesRoutes = require("./routes/scalesRoutes.js");
