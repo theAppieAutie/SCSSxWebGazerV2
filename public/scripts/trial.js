@@ -53,7 +53,6 @@ for (let i = 0; i < packetArray.length; i++) {
   packetArray[i]["acceptedRecommendation"] = false;
 }
 
-
 // Initialize variables and elements
 const gameObj = document.getElementById("game");
 const panelsElement = document.getElementsByClassName("panels")[0];
