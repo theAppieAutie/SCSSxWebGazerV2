@@ -167,7 +167,7 @@ const startTrial = () => {
 
 async function compressGazeData(gazeData) {
   try {
-    const compressed = pako.gzip(JSON.stringify(gazeData))
+    const compressed = await pako.gzip(JSON.stringify(gazeData))
     return compressed;
   } catch (err) {
     console.error("Compression failed: ", err.message);
@@ -192,7 +192,7 @@ let gazeData = [];
 // handle participant input
 const handleGazeData = async () => {
   try {
-    const compressedGazeData = compressGazeData(gazeData);
+    const compressedGazeData =  await compressGazeData(gazeData);
     const response = await fetch('/trial/addGazeData', {
       method: 'POST',
       headers: {
