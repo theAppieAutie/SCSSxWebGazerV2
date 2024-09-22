@@ -228,7 +228,6 @@ const handleInput = async (data) => {
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
-    webgazer.pause();
 
     const result = await response.json();
     console.log('Regular data response:', result);

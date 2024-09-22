@@ -13,7 +13,7 @@ router.get('/trial', async (req, res) => startTrial(req, res));
   //  handle adding data to Experiment
 router.post("/addTrial", async (req, res) => stopTrial(req, res));
 
-router.post("/addGazeData",async (req,res) => addGazeData(req, res));
+router.post("/addGazeData", async (req,res) => addGazeData(req, res));
 
 module.exports = router;
 

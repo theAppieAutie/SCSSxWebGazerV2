@@ -2,6 +2,27 @@
 if (process.env.NODE_ENV !== "production") {
     require("dotenv").config();
   }
+
+
+//  middleware function for decompression
+function gzipDecompression(req, res, next) {
+    if (req.headers['content-encoding'] === 'gzip') {
+        const gunzip = zlib.createGunzip();
+        req.pipe(gunzip);
+
+        let body = [];
+        gunzip.on('data', (chunk) => {
+            body.push(chunk);
+        }).on('end', () => {
+            req.body = Buffer.concat(body).toString();
+            next();
+        }).on('error', (err) => {
+            next(err);
+        });
+    } else {
+        next();
+    }
+}
   
 // Import modules and configurations
 const express = require('express');
@@ -32,6 +53,7 @@ app.use("/public", express.static(path.join(__dirname, "/public")));
 app.use(express.static(path.join(__dirname, "/public")));
 
 // middleware
+app.use(gzipDecompression);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
