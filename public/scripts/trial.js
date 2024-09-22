@@ -165,9 +165,9 @@ const startTrial = () => {
   animatePackets();
 };
 
-async function compressGazeData(gazeData) {
+function compressGazeData(gazeData) {
   try {
-    const compressed = await pako.gzip(JSON.stringify(gazeData))
+    const compressed = pako.gzip(JSON.stringify(gazeData))
     return compressed;
   } catch (err) {
     console.error("Compression failed: ", err.message);

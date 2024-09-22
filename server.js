@@ -57,17 +57,23 @@ app.use((req, res, next) => {
       });
   
       unzip.on('end', () => {
-        req.body = JSON.parse(data);
-        next();
+        try {
+          req.body = JSON.parse(data);
+          next();
+        } catch (err) {
+          console.error('JSON parsing error:', err);
+          res.status(400).send('Invalid JSON data');
+        }
       });
   
       unzip.on('error', (err) => {
-        next(err);
+        console.error('Decompression error:', err);
+        res.status(400).send('Invalid compressed data');
       });
     } else {
       next();
     }
-});
+  });
 
 
 
