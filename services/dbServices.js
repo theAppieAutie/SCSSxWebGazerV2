@@ -95,7 +95,7 @@ const insertGazeData = async(trial, x, y, elapsedTime) => {
         const values = [trial, x, y, elapsedTime];
         const result = await client.query(query, values);
     } catch (err) {
-        console.error("error inserting gaze data" , err.stack);
+        console.error(`Error inserting gaze data ${values}\n${err.stack}`);
     } finally {
         client.release();
     }
