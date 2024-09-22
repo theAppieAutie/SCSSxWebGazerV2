@@ -193,13 +193,13 @@ let gazeData = [];
 const handleGazeData = async () => {
   try {
     const compressedGazeData = compressGazeData(gazeData);
-    const response = await axios.post('/trial/addGazeData', compressedGazeData, {
+    const response = await fetch('/trial/addGazeData', {
+      method: 'POST',
       headers: {
-        'Accept': 'application/json',
         'Content-Encoding': 'gzip',
         'Content-Type': 'application/json'
       },
-      responseType: 'json'
+      body: compressedGazeData
     });
 
     if (!response.ok) {
