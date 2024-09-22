@@ -165,12 +165,13 @@ const startTrial = () => {
   animatePackets();
 };
 
-function compressGazeData(gazeData) {
+function compressGazeData(payload) {
   try {
-    const compressed = pako.gzip(JSON.stringify(gazeData))
+    const jsonString = JSON.stringify(payload);
+    const compressed = pako.gzip(jsonString)
     return compressed;
   } catch (err) {
-    console.error("Compression failed: ", err.message);
+    console.error(`Compression failed: ${err.message}`);
   }
 }
   
@@ -208,7 +209,7 @@ const handleGazeData = async () => {
       window.location.href = "/information/rules"
     }
   } catch (err) {
-    console.log('Error:', err);
+    console.log('Error sending payload:', err);
   }
 };
 

@@ -13,7 +13,6 @@ const session = require('express-session');
 const methodOverride = require('method-override');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
-const zlib = require('zlib');
 const participantDetailsRoutes = require("./routes/participantDetailsRoutes.js");
 const informationRoutes = require("./routes/informationRoutes.js");
 const scalesRoutes = require("./routes/scalesRoutes.js");
@@ -46,34 +45,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use((req, res, next) => {
-    if (req.headers['content-encoding'] === 'gzip') {
-      const unzip = zlib.createUnzip();
-      req.pipe(unzip);
-  
-      let data = '';
-      unzip.on('data', (chunk) => {
-        data += chunk;
-      });
-  
-      unzip.on('end', () => {
-        try {
-          req.body = JSON.parse(data);
-          next();
-        } catch (err) {
-          console.error('JSON parsing error:', err);
-          res.status(400).send('Invalid JSON data');
-        }
-      });
-  
-      unzip.on('error', (err) => {
-        console.error('Decompression error:', err);
-        res.status(400).send('Invalid compressed data');
-      });
-    } else {
-      next();
-    }
-  });
 
 
 

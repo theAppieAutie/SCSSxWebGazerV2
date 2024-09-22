@@ -1,3 +1,5 @@
+const zlib = require('zlib');
+
 exports.startTrial = async (req, res, next) => {
     try {
         if (!req.session.condition) {
@@ -59,18 +61,50 @@ exports.stopTrial = async (req, res, next) => {
 
 
 exports.addGazeData = async (req, res, next) => {
-
-    try {
+    if (req.headers['content-encoding'] === 'gzip') {
+      const chunks = [];
+      req.on('data', (chunk) => chunks.push(chunk));
+      req.on('end', async () => {
+        const buffer = Buffer.concat(chunks);
+        zlib.gunzip(buffer, async (err, decoded) => {
+          if (err) {
+            console.error('Decompression error:', err);
+            return res.status(400).send('Invalid compressed data');
+          }
+          try {
+            req.body = JSON.parse(decoded.toString());
+            
+            const trialId = await req.dbServices.getLastTrialId();
+            for (let gazeData of req.body['data']) {
+              await req.dbServices.insertGazeData(trialId, parseFloat(gazeData.x), parseFloat(gazeData.y), gazeData.time);
+            }
+  
+            res.status(200).json({ message: "Gaze Data stored" });
+          } catch (err) {
+            console.error('JSON parsing error:', err);
+            res.status(400).send('Invalid JSON data');
+          }
+        });
+      });
+  
+      req.on('error', (err) => {
+        console.error('Request error:', err);
+        res.status(400).send('Invalid request data');
+      });
+  
+    } else {
+      // If content is not gzip-compressed
+      try {
         const trialId = await req.dbServices.getLastTrialId();
-
+  
         for (let gazeData of req.body['data']) {
-            await req.dbServices.insertGazeData(trialId, parseFloat(gazeData.x), parseFloat(gazeData.y), gazeData.time);
+          await req.dbServices.insertGazeData(trialId, parseFloat(gazeData.x), parseFloat(gazeData.y), gazeData.time);
         }
-
-        res.status(200).json({message:"Gaze Data stored"})
-
-    } catch (err) {
-        console.log("Error: ", err)
+  
+        res.status(200).json({ message: "Gaze Data stored" });
+      } catch (err) {
+        console.log("Error:", err);
+        res.status(500).json({ error: "Internal Server Error" });
+      }
     }
-
-}
+  };
