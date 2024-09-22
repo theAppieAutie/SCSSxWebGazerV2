@@ -64,7 +64,7 @@ exports.addGazeData = async (req, res, next) => {
         const trialId = await req.dbServices.getLastTrialId();
 
         for (let gazeData of req.body['gazeData']) {
-            await req.dbServices.insertGazeData(trialId, gazeData.x, gazeData.y, gazeData.time);
+            await req.dbServices.insertGazeData(trialId, parseFloat(gazeData.x), parseFloat(gazeData.y), gazeData.time);
         }
 
         res.status(200).json({message:"Gaze Data stored"})
