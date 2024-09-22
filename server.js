@@ -16,8 +16,13 @@ function gzipDecompression(req, res, next) {
         gunzip.on('data', (chunk) => {
             body.push(chunk);
         }).on('end', () => {
-            req.body = Buffer.concat(body).toString();
-            next();
+            try {
+                req.body = Buffer.concat(body).toString();
+                next();
+            } catch (e) {
+                console.log(`error has occurred here ${e}`)
+                next(e)
+            }
         }).on('error', (err) => {
             next(err);
         });
