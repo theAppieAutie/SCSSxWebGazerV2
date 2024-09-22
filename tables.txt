@@ -15,7 +15,6 @@
  trials     | end_time       | timestamp without time zone
  trials     | trial_id       | integer
  trials     | trial_type     | character varying
- trials     | video_url      | text
 
  packets    | packet_id              | integer
  packets    | trial_id               | integer FOREIGN KEY -> trials

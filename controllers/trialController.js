@@ -34,68 +34,26 @@ exports.startTrial = async (req, res, next) => {
         console.error(err);
     }
 }
+
 exports.stopTrial = async (req, res, next) => {
 
     try {
-
-
-
         const trialEndTime = req.body["trialEndTime"];
-
-
-
-        const trialType = req.session.trialNumber ===
-0 ? 'test' :
-'main';
-
-        
-
-       
-
-        const trialId =
-await req.dbServices.insertTrial(req.session.participantId, trialType, req.session.trialNumber, req.session.trialStartTime, trialEndTime);
-
-      
-
-
+        const trialType = req.session.trialNumber === 0 ? 'test' : 'main';
+        const trialId = await req.dbServices.insertTrial(req.session.participantId, trialType, req.session.trialNumber, req.session.trialStartTime, trialEndTime);
 
         req.session.trialNumber++;
 
-
-
-        
-
-        for (let input
-of req.body["input"]) {
-
-         
-
-            input['time'] = input['time'] ? input['time'] :
-new Date().toISOString();
-
-          
-
+        for (let input of req.body["input"]) {
+            input['time'] = input['time'] ? input['time'] : new Date().toISOString();
             await req.dbServices.insertPacket(trialId, input.user, input.advisor, input.accepted, input.time);
-
-       
-
         }
 
-        res.status(200).json({ message:
-'Regular data received successfully' });
-
-
-
-        
+        res.status(200).json({ message: 'Regular data received successfully' });
 
     } catch (err) {
-
         console.error("Error caught :",err);
-
     }
-
-
-
 }
 
 
@@ -103,30 +61,16 @@ new Date().toISOString();
 exports.addGazeData = async (req, res, next) => {
 
     try {
+        const trialId = await req.dbServices.getLastTrialId();
 
-
-
-        const trialId =
-await req.dbServices.getLastTrialId();
-
-
-
-        for (let gazeData
-of req.body['gazeData']) {
-
+        for (let gazeData of req.body['gazeData']) {
             await req.dbServices.insertGazeData(trialId, gazeData.x, gazeData.y, gazeData.time);
-
         }
 
-
-
-        res.status(200).json({message:
-"Gaze Data stored"})
+        res.status(200).json({message:"Gaze Data stored"})
 
     } catch (err) {
-
         console.log("Error: ", err)
-
     }
 
 }
