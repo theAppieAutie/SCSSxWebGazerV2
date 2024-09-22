@@ -1,9 +1,8 @@
 import { initializeClassificationButtons, confirmClassification } from './classification.js';
 import {config} from "./config.js";
-import {gzip} from 'zlib';
-import { promisify } from 'util';
+import axios from 'axios';
+import pako from 'pako';
 
-const gzipAsync = promisify(gzip);
 
 //  object holding censored item list to add blur
 const censoredOptions = {
@@ -169,7 +168,7 @@ const startTrial = () => {
 
 async function compressGazeData(gazeData) {
   try {
-    const compressed = await gzipAsync(JSON.stringify(gazeData))
+    const compressed = pako.gzip(JSON.stringify(gazeData))
     return compressed;
   } catch (err) {
     console.error("Compression failed: ", err.message);
@@ -195,14 +194,13 @@ let gazeData = [];
 const handleGazeData = async () => {
   try {
     const compressedGazeData = compressGazeData(gazeData);
-    const response = await fetch('/trial/addGazeData', {
-      method: 'POST',
+    const response = await axios.post('/trial/addGazeData', compressedGazeData, {
       headers: {
         'Accept': 'application/json',
         'Content-Encoding': 'gzip',
         'Content-Type': 'application/json'
       },
-      body: compressedGazeData
+      responseType: 'json'
     });
 
     if (!response.ok) {
