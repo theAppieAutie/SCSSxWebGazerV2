@@ -71,16 +71,10 @@ if (group !== "A") {
 if (config.censoring) {
   document.getElementById(censoredOptions[censoredInfo][censoredArrayNumber]).classList.add("blur");
 }
-if (conditionText) {
-  document.getElementById("advice").textContent = conditionText;
-} else {
-  document.getElementById("advice").classList.add("hide");
-}
+
+document.getElementById("condition").textContent = `${conditionText}`;
 
 if (conditionText === "") {
-  document.getElementById("accept").classList.add("hide");
-}
-if (conditionText === "No Advisor") {
   document.getElementById("accept").classList.add("hide");
   document.getElementById("advice").classList.add("hide");
 }
