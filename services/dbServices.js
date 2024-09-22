@@ -9,37 +9,12 @@ const {Pool} = require('pg');
 
 //   hosted on heroku for my hosted version only
 
-const getLastTrialId = 
-async () => {
-    const client =
-await pool.connect();
-
-    try {
-
-        const query =
-"SELECT MAX(trial_id) AS max_id FROM trials;"
-
-        const result =
-await client.query(query);
-
-        const maxId = result.rows[0].max_id;
-
-        return maxId;
-
-    } finally {
-
-        client.release();
-
-    }
-
-}
-
- const pool = new Pool({
+const pool = new Pool({
     connectionString: process.env.SUPABASE_DB_URL,
-     ssl:{
-         rejectUnauthorized: false
-     }
- });
+        ssl:{
+            rejectUnauthorized: false
+        }
+});
   
 pool.connect()
     .then(() => console.log('Connected to PostgreSQL'))
@@ -83,6 +58,21 @@ const insertTrial = async (participant, type, number, start, end, url) => {
         client.release();
     }
 };
+
+const getLastTrialId = async () => {
+    const client = await pool.connect();
+    try {
+        const query = "SELECT MAX(trial_id) AS max_id FROM trials;"
+        const result = await client.query(query);
+
+        const maxId = result.rows[0].max_id;
+
+        return maxId;
+
+    } finally {
+        client.release();
+    }
+}
 
 const insertPacket = async (trial, user, advisor, accepted, time) => {
     const client = await pool.connect();
