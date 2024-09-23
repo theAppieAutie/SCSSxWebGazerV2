@@ -2,6 +2,7 @@
 const {startTrial, stopTrial, addGazeData} = require('../controllers/trialController');
 
 const express = require('express');
+const zlib = require('zlib');
 
 const router = express.Router();
 
