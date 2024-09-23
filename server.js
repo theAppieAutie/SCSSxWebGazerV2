@@ -19,7 +19,7 @@ function gzipDecompression(req, res, next) {
         }).on('end', () => {
             console.log(`********************** finished gunzip now going to try concat to string`)
             try {
-                req.body = Buffer.concat(body).toString(); // add a console.log here to see if the try is successful don't think it is
+                req.body = JSON.parse(Buffer.concat(body).toString()); // add a console.log here to see if the try is successful don't think it is
                 console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!! ${req.body}`)
                 next();
             } catch (e) {
