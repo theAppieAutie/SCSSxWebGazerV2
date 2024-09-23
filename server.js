@@ -65,10 +65,10 @@ app.use(express.static(path.join(__dirname, "/public")));
 
 // middleware
 app.use(gzipDecompression);
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
 app.use(flash());
 app.use(methodOverride('_method'));
 
