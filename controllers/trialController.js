@@ -58,16 +58,54 @@ exports.stopTrial = async (req, res, next) => {
     }
 }
 
+const zlib = require('zlib');
+
+
+async function gzipDecompression(data) {
+    
+    const gunzip = zlib.createGunzip();
+
+    let buffer = [];
+
+    gunzip.on('data', (chunk) => { 
+        buffer.push(chunk);
+    })
+
+    const decompressPromise = new Promise((resolve, reject) => {
+
+        gunzip.on('end', () => {
+
+            try {
+                const decompressedBuffer = Buffer.concat(buffer); 
+               
+                const jsonData = JSON.parse(decompressedBuffer);
+                resolve(jsonData);
+            } catch (error) {
+                reject(error)
+            }
+        });
+
+        gunzip.on('error', (err) => {
+            console.log(`Decompression Error: ${err}`)
+            reject(err);
+        });
+    });
+
+    gunzip.end(Buffer.from(data, 'base64'));
+    return decompressPromise;
+} 
 
 
 exports.addGazeData = async (req, res, next) => {
-    console.log("$$$$$$$$$$$$$$$$ we are at the endpoint")
+    
     try {
-        console.log(req.body['data'])
+        const decompressedData = await gzipDecompression(req.body.compressedGazeData);
+        console.log(`type of data for decompressedData = ${typeof decompressedData}`);
         const trialId = await req.dbServices.getLastTrialId();
 
-        for (let gazeData of req.body['data']) {
-        await req.dbServices.insertGazeData(trialId, parseFloat(gazeData.x), parseFloat(gazeData.y), gazeData.time);
+        for (let gazeData of decompressedData) {
+            console.log(gazeData)
+            // await req.dbServices.insertGazeData(trialId, parseFloat(gazeData.x), parseFloat(gazeData.y), gazeData.time);
         }
 
         res.status(200).json({ message: "Gaze Data stored" });
