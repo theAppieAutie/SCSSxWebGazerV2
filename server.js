@@ -27,6 +27,7 @@ function gzipDecompression(req, res, next) {
                 next(e)
             }
         }).on('error', (err) => {
+            console.log(`Decompression Error: ${err}`)
             next(err);
         });
     } else {
