@@ -5,38 +5,7 @@ if (process.env.NODE_ENV !== "production") {
 
   const zlib = require('zlib');
 
-//  middleware function for decompression
-function gzipDecompression(req, res, next) {
-    if (req.headers['content-encoding'] === 'gzip') {
-        console.log("gzip encoding detected") // this gets logged but nothing more 
-        const gunzip = zlib.createGunzip();
-        req.pipe(gunzip);
 
-        let body = [];
-        gunzip.on('data', (chunk) => { //maybelook into this code a bit more
-            console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!! ${chunk}`)
-            body.push(chunk);
-        }).on('end', () => {
-            console.log(`********************** finished gunzip now going to try concat to string`)
-            try {
-                const decompressedPayload = Buffer.concat(body); // add a console.log here to see if the try is successful don't think it is
-                console.log(`payload length ${decompressedPayload.length}`)
-                req.body = JSON.parse(decompressedPayload.toString());
-                console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!! ${req.body}`)
-                delete req.headers['content-encoding'];
-                next();
-            } catch (e) {
-                console.log(`error has occurred here ${e}`)
-                next(e)
-            }
-        }).on('error', (err) => {
-            console.log(`Decompression Error: ${err}`)
-            next(err);
-        });
-    } else {
-        next();
-    }
-}
   
 // Import modules and configurations
 const express = require('express');
