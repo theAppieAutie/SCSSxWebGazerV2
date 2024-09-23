@@ -23,6 +23,7 @@ function gzipDecompression(req, res, next) {
                 console.log(`payload length ${decompressedPayload.length}`)
                 req.body = JSON.parse(decompressedPayload.toString());
                 console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!! ${req.body}`)
+                delete req.headers['content-encoding'];
                 next();
             } catch (e) {
                 console.log(`error has occurred here ${e}`)
