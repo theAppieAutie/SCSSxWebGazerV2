@@ -40,8 +40,6 @@ app.set("view engine", "ejs");
 app.use("/public", express.static(path.join(__dirname, "/public")));
 app.use(express.static(path.join(__dirname, "/public")));
 
-// middleware
-app.use(gzipDecompression);
 // app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use(bodyParser.urlencoded({ extended: false }));
