@@ -193,15 +193,16 @@ let gazeData = [];
 // handle participant input
 const handleGazeData = async () => {
   try {
-    const compressedGazeData =  await compressGazeData(gazeData);
+    const compressedGazeData =  pako.gzip(JSON.stringify(gazeData));
     const response = await fetch('/trial/addGazeData', {
       method: 'POST',
       headers: {
-        'Content-Encoding': 'gzip',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Content-Encoding': 'gzip'
       },
       body: compressedGazeData
     });
+    console.log(`****** data sent was ${compressedGazeData} *********`)
 
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
