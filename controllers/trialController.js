@@ -60,18 +60,19 @@ exports.stopTrial = async (req, res, next) => {
 
 
 
-exports.addGazeData = async (req, res, next) => {  
-  try {
-    console.log(req.body['data'])
-    const trialId = await req.dbServices.getLastTrialId();
+exports.addGazeData = async (req, res, next) => {
+    console.log("$$$$$$$$$$$$$$$$ we are at the endpoint")
+    try {
+        console.log(req.body['data'])
+        const trialId = await req.dbServices.getLastTrialId();
 
-    for (let gazeData of req.body['data']) {
-      await req.dbServices.insertGazeData(trialId, parseFloat(gazeData.x), parseFloat(gazeData.y), gazeData.time);
+        for (let gazeData of req.body['data']) {
+        await req.dbServices.insertGazeData(trialId, parseFloat(gazeData.x), parseFloat(gazeData.y), gazeData.time);
+        }
+
+        res.status(200).json({ message: "Gaze Data stored" });
+    } catch (err) {
+        console.log("Error at the endpoint:", err);
+        res.status(500).json({ error: "Internal Server Error" });
     }
-
-    res.status(200).json({ message: "Gaze Data stored" });
-  } catch (err) {
-    console.log("Error:", err);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
 };
