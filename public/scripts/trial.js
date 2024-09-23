@@ -194,6 +194,7 @@ let gazeData = [];
 const handleGazeData = async () => {
   try {
     const compressedGazeData =  pako.gzip(JSON.stringify(gazeData));
+    console.log(`compressed length = ${compressedGazeData.length}`)
     const response = await fetch('/trial/addGazeData', {
       method: 'POST',
       headers: {

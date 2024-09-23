@@ -19,7 +19,9 @@ function gzipDecompression(req, res, next) {
         }).on('end', () => {
             console.log(`********************** finished gunzip now going to try concat to string`)
             try {
-                req.body = JSON.parse(Buffer.concat(body).toString()); // add a console.log here to see if the try is successful don't think it is
+                const decompressedPayload = Buffer.concat(body); // add a console.log here to see if the try is successful don't think it is
+                console.log(`payload length ${decompressedPayload.length}`)
+                req.body = JSON.parse(decompressedPayload.toString());
                 console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!! ${req.body}`)
                 next();
             } catch (e) {
@@ -51,7 +53,10 @@ const scalesRoutes = require("./routes/scalesRoutes.js");
 const trialRoutes = require("./routes/trialRoutes.js");
 const dbServices = require("./services/dbServices.js");
 
-
+app.use((req, res, next) => {
+    console.log(`Headers are: ${req.headers}`);
+    next();
+})
   
 const app = express();
   
