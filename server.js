@@ -25,10 +25,7 @@ const dbServices = require("./services/dbServices.js");
 
 const app = express();
 
-app.use((req, res, next) => {
-    console.log(`Headers are: ${req.headers}`);
-    next();
-})
+
   
 
   
