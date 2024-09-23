@@ -53,12 +53,14 @@ const scalesRoutes = require("./routes/scalesRoutes.js");
 const trialRoutes = require("./routes/trialRoutes.js");
 const dbServices = require("./services/dbServices.js");
 
+const app = express();
+
 app.use((req, res, next) => {
     console.log(`Headers are: ${req.headers}`);
     next();
 })
   
-const app = express();
+
   
 // Configure views
 app.set("views", path.join(__dirname, "./views"));
