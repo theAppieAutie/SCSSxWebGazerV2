@@ -8,16 +8,18 @@ if (process.env.NODE_ENV !== "production") {
 //  middleware function for decompression
 function gzipDecompression(req, res, next) {
     if (req.headers['content-encoding'] === 'gzip') {
-        console.log("gzip encoding detected")
+        console.log("gzip encoding detected") // this gets logged but nothing more 
         const gunzip = zlib.createGunzip();
         req.pipe(gunzip);
 
         let body = [];
-        gunzip.on('data', (chunk) => {
+        gunzip.on('data', (chunk) => { //maybelook into this code a bit more
+            console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!! ${chunk}`)
             body.push(chunk);
         }).on('end', () => {
             try {
-                req.body = Buffer.concat(body).toString();
+                req.body = Buffer.concat(body).toString(); // add a console.log here to see if the try is successful don't think it is
+                console.log(`!!!!!!!!!!!!!!!!!!!!!!!!!! ${req.body}`)
                 next();
             } catch (e) {
                 console.log(`error has occurred here ${e}`)
